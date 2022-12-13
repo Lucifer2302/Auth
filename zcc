@@ -1,0 +1,113 @@
+USE [BarberShop_Koshevoi]
+GO
+/****** Object:  Table [dbo].[Barber]    Script Date: 08.12.2022 13:23:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Barber](
+	[ID] [int] NOT NULL,
+	[Name] [nvarchar](30) NULL,
+	[Password] [nvarchar](30) NULL,
+	[Post] [nvarchar](30) NULL,
+	[Information] [nvarchar](250) NULL,
+	[Photo] [varbinary](max) NULL,
+ CONSTRAINT [PK_Barber] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Clients]    Script Date: 08.12.2022 13:23:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Clients](
+	[Key] [int] NOT NULL,
+	[Surname] [nvarchar](50) NULL,
+	[Name] [nvarchar](50) NULL,
+	[EndName] [nvarchar](50) NULL,
+	[Gender] [nvarchar](50) NULL,
+	[Phone] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Clients] PRIMARY KEY CLUSTERED 
+(
+	[Key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Record]    Script Date: 08.12.2022 13:23:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Record](
+	[ID] [int] NOT NULL,
+	[ServiceID] [int] NULL,
+	[BarberID] [int] NULL,
+	[ClientID] [int] NULL,
+	[DateAndTime] [datetime] NULL,
+	[Comment] [nvarchar](100) NULL,
+	[ShopID] [int] NULL,
+ CONSTRAINT [PK_Record] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Service]    Script Date: 08.12.2022 13:23:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Service](
+	[ID] [int] NOT NULL,
+	[ServiceName] [nvarchar](30) NULL,
+	[Price] [decimal](18, 2) NULL,
+	[Photo] [varbinary](max) NULL,
+ CONSTRAINT [PK_Service] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Shop]    Script Date: 08.12.2022 13:23:24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Shop](
+	[ID] [int] NOT NULL,
+	[Product] [nvarchar](50) NULL,
+	[Price] [decimal](18, 2) NULL,
+ CONSTRAINT [PK_Shop] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+INSERT [dbo].[Barber] ([ID], [Name], [Password], [Post], [Information], [Photo]) VALUES (1, N'Дима', NULL, N'Админ', N'Пухлый', NULL)
+INSERT [dbo].[Clients] ([Key], [Surname], [Name], [EndName], [Gender], [Phone]) VALUES (1, N'Соколовский', N'Павел', N'Витальевич', N'Ж', N'9775442851')
+INSERT [dbo].[Clients] ([Key], [Surname], [Name], [EndName], [Gender], [Phone]) VALUES (2, N'Дмитриевич', N'Дмитрий', N'Дмитриев', N'М', N'9772861879')
+INSERT [dbo].[Service] ([ID], [ServiceName], [Price], [Photo]) VALUES (1, N'Короткая стрижка', CAST(1.00 AS Decimal(18, 2)), NULL)
+INSERT [dbo].[Shop] ([ID], [Product], [Price]) VALUES (1, N'Шампунь Жумайсымба', CAST(999999.00 AS Decimal(18, 2)))
+ALTER TABLE [dbo].[Record]  WITH CHECK ADD  CONSTRAINT [FK_Record_Barber] FOREIGN KEY([BarberID])
+REFERENCES [dbo].[Barber] ([ID])
+GO
+ALTER TABLE [dbo].[Record] CHECK CONSTRAINT [FK_Record_Barber]
+GO
+ALTER TABLE [dbo].[Record]  WITH CHECK ADD  CONSTRAINT [FK_Record_Clients] FOREIGN KEY([ClientID])
+REFERENCES [dbo].[Clients] ([Key])
+GO
+ALTER TABLE [dbo].[Record] CHECK CONSTRAINT [FK_Record_Clients]
+GO
+ALTER TABLE [dbo].[Record]  WITH CHECK ADD  CONSTRAINT [FK_Record_Service] FOREIGN KEY([ServiceID])
+REFERENCES [dbo].[Service] ([ID])
+GO
+ALTER TABLE [dbo].[Record] CHECK CONSTRAINT [FK_Record_Service]
+GO
+ALTER TABLE [dbo].[Record]  WITH CHECK ADD  CONSTRAINT [FK_Record_Shop] FOREIGN KEY([ShopID])
+REFERENCES [dbo].[Shop] ([ID])
+GO
+ALTER TABLE [dbo].[Record] CHECK CONSTRAINT [FK_Record_Shop]
+GO
